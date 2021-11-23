@@ -5,13 +5,13 @@ import {
 import { JsonPatch } from "../mod.ts";
 
 Deno.test("test patch for corner cases", async (t) => {
-  const jPacth = new JsonPatch();
+  const jPatch = new JsonPatch();
 
   await t.step("patch to an empty json", () => {
     const from = {},
       to = {};
-    const patch = jPacth.diff(from, to);
-    const result = jPacth.patch(from, patch);
+    const patch = jPatch.diff(from, to);
+    const result = jPatch.patch(from, patch);
 
     assertExists(result);
     assertObjectMatch(to, result as Record<string, unknown>);
@@ -19,13 +19,13 @@ Deno.test("test patch for corner cases", async (t) => {
 });
 
 Deno.test("test patch with array", async (t) => {
-  const jPacth = new JsonPatch();
+  const jPatch = new JsonPatch();
 
   await t.step("add array", () => {
     const from = { toDel: [12, "qwq"] },
       to = { arr: [12, "qwq", null, true, "13", false] };
-    const patch = jPacth.diff(from, to);
-    const result = jPacth.patch(from, patch);
+    const patch = jPatch.diff(from, to);
+    const result = jPatch.patch(from, patch);
 
     assertExists(result);
     assertObjectMatch(to, result as Record<string, unknown>);
@@ -34,8 +34,8 @@ Deno.test("test patch with array", async (t) => {
   await t.step("modify array", () => {
     const from = { toDel: [12, "qwq"], arr: ["qwq", 12] },
       to = { arr: [12, "qwq", null, true, "13", false] };
-    const patch = jPacth.diff(from, to);
-    const result = jPacth.patch(from, patch);
+    const patch = jPatch.diff(from, to);
+    const result = jPatch.patch(from, patch);
 
     assertExists(result);
     assertObjectMatch(to, result as Record<string, unknown>);
@@ -51,8 +51,8 @@ Deno.test("test patch with array", async (t) => {
         arr: [12, "qwq", null, true, "13", false],
         arr2: [[12, [23], 13], null, null, {}],
       };
-    const patch = jPacth.diff(from, to);
-    const result = jPacth.patch(from, patch);
+    const patch = jPatch.diff(from, to);
+    const result = jPatch.patch(from, patch);
 
     assertExists(result);
     assertObjectMatch(to, result as Record<string, unknown>);
@@ -60,13 +60,24 @@ Deno.test("test patch with array", async (t) => {
 });
 
 Deno.test("test patch with object", async (t) => {
-  const jPacth = new JsonPatch();
+  const jPatch = new JsonPatch();
 
   await t.step("patch to an empty object", () => {
     const from = { obj: { a: 12, b: null } },
       to = { obj: {} };
-    const patch = jPacth.diff(from, to);
-    const result = jPacth.patch(from, patch);
+    const patch = jPatch.diff(from, to);
+    const result = jPatch.patch(from, patch);
+
+    assertExists(result);
+    assertObjectMatch(to, result as Record<string, unknown>);
+  });
+
+  await t.step("object with array", () => {
+    const from = { status: "waiting" },
+      to = { status: "ready", data: ["1024", true] };
+
+    const patch = jPatch.diff(from, to);
+    const result = jPatch.patch(from, patch);
 
     assertExists(result);
     assertObjectMatch(to, result as Record<string, unknown>);
@@ -75,8 +86,8 @@ Deno.test("test patch with object", async (t) => {
   await t.step("patch to nested object", () => {
     const from = { obj: { a: 12, b: null }, target: {} },
       to = { obj: {}, target: { nested: { arr: [12, 13] } } };
-    const patch = jPacth.diff(from, to);
-    const result = jPacth.patch(from, patch);
+    const patch = jPatch.diff(from, to);
+    const result = jPatch.patch(from, patch);
 
     assertExists(result);
     assertObjectMatch(to, result as Record<string, unknown>);
