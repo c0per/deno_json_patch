@@ -1,2 +1,4 @@
-export { JsonPointer } from "./src/json_pointer.ts";
-export { JsonPatch } from "./src/json_patch.ts";
+import { JsonPointer } from "./src/json_pointer.ts";
+import { JsonPatch } from "./src/json_patch.ts";
+
+export { JsonPatch, JsonPointer };
