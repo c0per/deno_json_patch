@@ -103,7 +103,7 @@ export class JsonPatch {
   patch(
     json: JsonValueType,
     patch: JsonPatchType,
-    options: { inplace: boolean } = { inplace: true }
+    options: { inplace: boolean } = { inplace: true },
   ): JsonValueType {
     if (!isObject(json)) throw new Error("JSON is required to apply patch");
     let patched: JsonValueType = clone(json);
@@ -189,7 +189,7 @@ export class JsonPatch {
             Array(from.length - to.length).fill({
               op: "remove",
               path: `${path}/${to.length}`,
-            })
+            }),
           );
         }
         if (to.length > from.length) {
@@ -214,8 +214,8 @@ export class JsonPatch {
               this.diff(
                 from[key],
                 to[key],
-                `${path}/${this.jPointer.escapeSlash(key)}`
-              )
+                `${path}/${this.jPointer.escapeSlash(key)}`,
+              ),
             );
           }
         }

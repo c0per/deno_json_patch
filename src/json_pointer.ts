@@ -53,7 +53,7 @@ export class JsonPointer {
       prefixToken.length >= pathToken.length ||
       !prefixToken.reduce(
         (prev, curr, idx) => prev && curr === pathToken[idx],
-        true
+        true,
       )
     );
   }
@@ -61,7 +61,7 @@ export class JsonPointer {
   apply(
     json: JsonValueType,
     path: string,
-    options: { deepClone: boolean } = { deepClone: false }
+    options: { deepClone: boolean } = { deepClone: false },
   ): {
     target: JsonValueType | undefined;
     parent: Record<string, JsonValueType> | JsonValueType[] | null;
