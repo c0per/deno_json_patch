@@ -3,7 +3,7 @@ import { isObject } from "./utils.ts";
 import type { JsonValueType } from "./utils.ts";
 
 export class JsonPointer {
-  escapeSlash(path: string) {
+  unescapeSlash(path: string) {
     // Escape slashes in tokens according to RFC6901
     return path.replaceAll("~1", "/").replaceAll("~0", "~");
   }
@@ -20,7 +20,7 @@ export class JsonPointer {
   }
 
   getTokens(path: string): string[] {
-    return path.slice(1).split("/").map(this.escapeSlash);
+    return path.slice(1).split("/").map(this.unescapeSlash);
   }
 
   isProperPrefix(path: string, prefix: string): boolean {
