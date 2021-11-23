@@ -9,13 +9,13 @@ fast.
 ## Generate patch
 
 ```typescript
-import { JsonPatch } from "./src/json_patch.ts";
+import { JsonPatch } from "https://deno.land/x/json_patch@v0.1.1/mod.ts";
 
 const jPatch = new JsonPatch();
 const from = { status: "waiting" },
   to = { status: "ready", data: ["1024", true] };
 
-const patch = jPatch.patch(from, to); // generate patch
+const patch = jPatch.diff(from, to); // generate patch
 // The patch is like the diff between "from" and "to".
 // You can apply the patch to "form" to patch it to become "to".
 ```
@@ -23,11 +23,13 @@ const patch = jPatch.patch(from, to); // generate patch
 ## Apply patch
 
 ```typescript
-import { JsonPatch } from "./src/json_patch.ts";
+import { JsonPatch } from "https://deno.land/x/json_patch@v0.1.1/mod.ts";
 
 const jPatch = new JsonPatch();
-const from = { status: "waiting" };
-const patch;
+const from = { status: "waiting" },
+  to = { status: "ready", data: ["1024", true] };
+
+const patch = jPatch.diff(from, to); // generate patch
 
 const result = jPatch.patch(from, patch);
 // "result" should be identical to "to".
@@ -39,13 +41,13 @@ json_patch comes with a tool to handle json pointer as well. You can get the
 location in json specified by a JSON Pointer based on RFC6901.
 
 ```typescript
-import { JsonPointer } from "./src/json_pointer.ts";
+import { JsonPointer } from "https://deno.land/x/json_patch@v0.1.1/mod.ts";
 
 const jPointer = new JsonPointer();
 const json = { arr: [12, [true, null]], str: "a string" };
 const pointer = "/arr/1/0";
 
-jPointer.apply(json, pointer) === null; // get the specified value
+jPointer.apply(json, pointer) === true; // get the specified value
 ```
 
 ## JSON Patch
