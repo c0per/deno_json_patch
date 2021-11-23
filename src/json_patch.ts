@@ -103,7 +103,7 @@ export class JsonPatch {
   patch(
     json: JsonValueType,
     patch: JsonPatchType,
-    options: { inplace: boolean } = { inplace: true },
+    options: { inplace: boolean } = { inplace: true }
   ): JsonValueType {
     if (!isObject(json)) throw new Error("JSON is required to apply patch");
     let patched: JsonValueType = clone(json);
@@ -189,7 +189,7 @@ export class JsonPatch {
             Array(from.length - to.length).fill({
               op: "remove",
               path: `${path}/${to.length}`,
-            }),
+            })
           );
         }
         if (to.length > from.length) {
@@ -204,16 +204,27 @@ export class JsonPatch {
       } else {
         for (const key in to) {
           if (from[key] === undefined) {
-            patch.push({ op: "add", path: `${path}/${key}`, value: to[key] });
+            patch.push({
+              op: "add",
+              path: `${path}/${this.jPointer.escapeSlash(key)}`,
+              value: to[key],
+            });
           } else {
             patch = patch.concat(
-              this.diff(from[key], to[key], `${path}/${key}`),
+              this.diff(
+                from[key],
+                to[key],
+                `${path}/${this.jPointer.escapeSlash(key)}`
+              )
             );
           }
         }
         for (const key in from) {
           if (key in to) continue;
-          patch.push({ op: "remove", path: `${path}/${key}` });
+          patch.push({
+            op: "remove",
+            path: `${path}/${this.jPointer.escapeSlash(key)}`,
+          });
         }
       }
     } else if (

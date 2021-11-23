@@ -4,8 +4,26 @@ import type { JsonValueType } from "./utils.ts";
 
 export class JsonPointer {
   unescapeSlash(path: string) {
-    // Escape slashes in tokens according to RFC6901
+    // Unescape slashes in tokens according to RFC6901
     return path.replaceAll("~1", "/").replaceAll("~0", "~");
+  }
+
+  escapeSlash(path: string) {
+    // Escape slashes in tokens according to RFC6901
+    let result = "";
+    for (let i = 0; i < path.length; i++) {
+      switch (path[i]) {
+        case "/":
+          result += "~1";
+          break;
+        case "~":
+          result += "~0";
+          break;
+        default:
+          result += path[i];
+      }
+    }
+    return result;
   }
 
   isValidPointer(path: unknown): path is string {
@@ -35,7 +53,7 @@ export class JsonPointer {
       prefixToken.length >= pathToken.length ||
       !prefixToken.reduce(
         (prev, curr, idx) => prev && curr === pathToken[idx],
-        true,
+        true
       )
     );
   }
@@ -43,7 +61,7 @@ export class JsonPointer {
   apply(
     json: JsonValueType,
     path: string,
-    options: { deepClone: boolean } = { deepClone: false },
+    options: { deepClone: boolean } = { deepClone: false }
   ): {
     target: JsonValueType | undefined;
     parent: Record<string, JsonValueType> | JsonValueType[] | null;
