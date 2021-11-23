@@ -71,4 +71,14 @@ Deno.test("test patch with object", async (t) => {
     assertExists(result);
     assertObjectMatch(to, result as Record<string, unknown>);
   });
+
+  await t.step("patch to nested object", () => {
+    const from = { obj: { a: 12, b: null }, target: {} },
+      to = { obj: {}, target: { nested: { arr: [12, 13] } } };
+    const patch = jPacth.diff(from, to);
+    const result = jPacth.patch(from, patch);
+
+    assertExists(result);
+    assertObjectMatch(to, result as Record<string, unknown>);
+  });
 });
