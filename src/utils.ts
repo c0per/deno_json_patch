@@ -67,7 +67,7 @@ export const isEqual = (a: JsonValueType, b: JsonValueType): boolean => {
     );
   }
 
-  if (typeof a in ["number", "boolean", "string"]) return a === b;
+  if (["number", "boolean", "string"].includes(typeof a)) return a === b;
 
   if (typeof a !== "object") return false; // It shouldn't happen as the type of a is jsonValue
   if (typeof b !== "object" || Array.isArray(b) || b === null) return false;
